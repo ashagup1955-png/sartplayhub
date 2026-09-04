@@ -1,0 +1,10 @@
+{
+  "name":"PlayHub - Browser Games",
+  "short_name":"PlayHub",
+  "start_url":"/",
+  "display":"standalone",
+  "background_color":"#0b1020",
+  "theme_color":"#0b1020",
+  "description":"Play browser games, 3D games and sandbox games on PlayHub.",
+  "icons":[{"src":"favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

@@ -1,0 +1,24 @@
+{
+  "project": "PlayHub",
+  "release": "fixed",
+  "game_count": 8,
+  "game_ids": [
+    "eaglercraft-1-12-2",
+    "iron-snout",
+    "neon-breaker",
+    "neon-catch",
+    "neon-core",
+    "neon-rise",
+    "neon-void",
+    "pixel-sandbox"
+  ],
+  "notes": [
+    "Broken game icon references corrected",
+    "Stale 87-game documentation corrected",
+    "Service-worker cache version bumped",
+    "Vercel trailing-slash behavior aligned with sitemap",
+    "Sitemap regenerated from actual game directories",
+    "Eaglercraft remains a large single-file game and is not added to shell precache",
+    "Supabase remains optional and requires owner-provided project credentials"
+  ]
+}

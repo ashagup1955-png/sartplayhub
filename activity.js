@@ -1,0 +1,15 @@
+(function(){
+ let logs=[], sub=null;
+ const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ function isOwner(){return !!window.playHubIsOwner && !!window.playHubCloudMode && !!window.currentUser}
+ window.openActivityPanel=function(){if(!isOwner()){showToast('Permission denied.');return} document.getElementById('home').classList.add('hidden');document.getElementById('player').classList.add('hidden');document.getElementById('activityPanel').classList.remove('hidden');refreshActivityLogs();startRealtime();};
+ window.closeActivityPanel=function(){document.getElementById('activityPanel').classList.add('hidden');document.getElementById('home').classList.remove('hidden');if(sub){sub.close();sub=null}};
+ async function getLogs(){if(!isOwner())return;try{const rows=await fetchLogs();logs=rows||[];renderActivityLogs()}catch(e){showToast(e.message||'Could not load activity logs.')}}
+ async function fetchLogs(){const c=window.PlayHubCloud; const r=await fetch(window.PLAYHUB_SUPABASE.url.replace(/\/$/, '')+'/rest/v1/activity_logs?select=id,event_type,game_id,game_name,metadata,created_at,user_id,user_email,display_name&order=created_at.desc&limit=500',{headers:{apikey:window.PLAYHUB_SUPABASE.anonKey,Authorization:'Bearer '+c.session().access_token}});if(!r.ok)throw new Error(await r.text());return r.json()}
+ window.refreshActivityLogs=getLogs;
+ window.renderActivityLogs=function(){const root=document.getElementById('activityList'),f=document.getElementById('activityFilter')?.value||'all';if(!root)return;const data=logs.filter(x=>f==='all'||x.event_type===f);if(!data.length){root.innerHTML='<div class="card" style="padding:28px;text-align:center">No activity recorded yet.</div>';return}root.innerHTML=data.map(x=>{const icon=x.event_type==='sign_in'?'🔐':x.event_type==='upload'?'⬆️':'🎮';const who=x.display_name||x.user_email||x.user_id||'Unknown user';const what=x.event_type==='sign_in'?'signed in':x.event_type==='upload'?`uploaded <b>${esc(x.game_name||'a game')}</b>`:`played <b>${esc(x.game_name||'a game')}</b>`;return `<article class="card" style="padding:15px;margin-bottom:10px"><div style="display:flex;gap:12px;align-items:flex-start"><div style="font-size:24px">${icon}</div><div style="flex:1"><b>${esc(who)}</b> ${what}<div style="opacity:.65;font-size:12px;margin-top:5px">${esc(new Date(x.created_at).toLocaleString())}${x.user_email?` · ${esc(x.user_email)}`:''}</div></div></div></article>`}).join('')};
+ function startRealtime(){if(sub)return; if(!window.PlayHubCloud?.realtime)return;sub=window.PlayHubCloud.realtime(async()=>{await getLogs();});}
+ window.addEventListener('online',()=>{if(document.getElementById('activityPanel')&&!document.getElementById('activityPanel').classList.contains('hidden')&&isOwner()){getLogs();startRealtime()}});
+ const oldUpdate=window.updateProfileUI; window.updateProfileUI=function(){if(oldUpdate)oldUpdate();const b=document.getElementById('activityButton');if(b)b.classList.toggle('hidden',!isOwner());};
+ setTimeout(()=>{if(window.updateProfileUI)window.updateProfileUI()},0);
+})();

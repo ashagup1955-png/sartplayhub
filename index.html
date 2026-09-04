@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PlayHub — Free Online Games | 3D, Arcade, Puzzle & More</title>
+<meta name="application-name" content="PlayHub">
+<meta name="theme-color" content="#6c45ff">
+<meta name="description" content="Play free online browser games on PlayHub. Discover 3D, arcade, racing, puzzle, sports, adventure, runner, shooter, endless and multiplayer games, including Iron Snout, Eaglercraft 1.12.2 and Pixel Sandbox.">
+<link rel="canonical" href="/">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PlayHub — Free Online Games">
+<meta property="og:description" content="Play free browser games instantly on PlayHub, including arcade, sandbox, racing, puzzle, sports and adventure games.">
+<meta property="og:site_name" content="PlayHub">
+<meta property="og:image" content="/assets/game-icons/eaglercraft-1-12-2.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PlayHub — Free Online Games">
+<meta name="twitter:description" content="Play free browser games instantly on PlayHub.">
+<link rel="icon" href="assets/game-icons/eaglercraft-1-12-2.png" type="image/png">
+<link rel="sitemap" type="application/xml" href="/sitemap.xml">
+<script type="application/ld+json">{
+  "@context":"https://schema.org",
+  "@type":"WebSite",
+  "name":"PlayHub",
+  "description":"Free online browser games including 3D, arcade, puzzle, racing, sports, adventure, runner, shooter, endless and multiplayer games.",
+  "potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"/?q={search_term_string}"},"query-input":"required name=search_term_string"}
+}</script>
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="favicon.svg">
+</head>
+<body><div id="networkStatus" class="network-status" aria-live="polite"></div>
+<header class="topbar">
+  <a class="logo" href="/" onclick="showHome();return false" aria-label="PlayHub home"><span>▶</span> PlayHub</a>
+  <div class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" autocomplete="off" placeholder="Search games..." aria-label="Search games" oninput="renderGames()"></div>
+  <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle theme">☼</button>
+  <span id="cloudStatus" class="cloud-offline" aria-live="polite">⌁ Offline — cloud account paused</span><button class="profile-btn hidden" id="adminButton" onclick="showAdminNotice()">Admin</button><button class="profile-btn hidden" id="activityButton" onclick="openActivityPanel()">Activity</button><button class="profile-btn" id="profileButton" onclick="openSignIn()">Sign in</button><button class="menu-btn" onclick="toggleMenu()" title="Open menu" aria-label="Open menu">☰</button>
+</header>
+<nav id="nav" aria-label="Game categories">
+  <button class="active" data-cat="All" onclick="setCategory('All',this)">Home</button>
+  <button data-cat="Simulation" onclick="setCategory('Simulation',this)">Simulation</button>
+  <button data-cat="3D" onclick="setCategory('3D',this)">3D</button>
+  <button data-cat="Arcade" onclick="setCategory('Arcade',this)">Arcade</button>
+  <button data-cat="Runner" onclick="setCategory('Runner',this)">Runner</button>
+  <button data-cat="Shooter" onclick="setCategory('Shooter',this)">Shooter</button>
+  <button data-cat="Puzzle" onclick="setCategory('Puzzle',this)">Puzzle</button>
+  <button data-cat="Racing" onclick="setCategory('Racing',this)">Racing</button>
+  <button data-cat="Sports" onclick="setCategory('Sports',this)">Sports</button>
+  <button data-cat="Adventure" onclick="setCategory('Adventure',this)">Adventure</button>
+  <button data-cat="Endless" onclick="setCategory('Endless',this)">Endless</button>
+  <button data-cat="2 Player" onclick="setCategory('2 Player',this)">2 Player</button>
+  <button data-cat="Multiplayer" onclick="setCategory('Multiplayer',this)">Multiplayer</button>
+  <button data-cat="Favorites" onclick="setCategory('Favorites',this)">♥ Favorites <span id="favCount"></span></button>
+</nav>
+<main id="home">
+<section class="hero">
+  <div class="hero-copy"><p class="eyebrow">FREE BROWSER GAMES</p><h1>Play something<br><em>awesome.</em></h1><p class="sub">Jump into instant games. No download. No sign-up. Built to feel fast on phones and desktops.</p><div class="hero-actions"><button class="primary" onclick="scrollToGames()">Browse games <span>→</span></button><button class="secondary" onclick="openGame('eaglercraft-1-12-2')">Play Eaglercraft</button></div></div>
+  <div class="hero-art" aria-hidden="true"><div class="orb one">★</div><div class="orb two">✦</div><div class="controller">🎮</div></div>
+</section>
+<section class="quick-stats"><div class="performance-card"><b>⚡</b><span>Fast, touch-friendly controls</span></div><div><b id="gameCount">87</b><span>games</span></div><div><b>500+</b><span>elements in Sandbox</span></div><div><b>3D</b><span>WebGL games included</span></div></section>
+<section class="upload-hero" aria-label="Upload your game"><div><p class="eyebrow">PLAYHUB COMMUNITY</p><h2>Have a single-file HTML game?</h2><p>Upload it locally, describe it, and add it to your personal PlayHub library.</p></div><div class="upload-actions"><button class="primary" onclick="openUpload()">＋ Upload HTML game</button><button class="secondary" onclick="openSignIn()" id="heroSignIn">Sign in</button></div></section>
+<section class="section" id="gamesSection">
+  <div class="section-head"><div><h2 id="sectionTitle">Popular games</h2><p id="resultText">Pick a game and start playing.</p></div><select id="sort" onchange="renderGames()" aria-label="Sort games"><option value="popular">Popular</option><option value="new">Newest</option><option value="az">A–Z</option></select></div>
+  <div id="games" class="grid" aria-live="polite"></div>
+  <div id="emptyState" class="empty hidden"><div>🔎</div><h3>No games found</h3><p>Try another search or category.</p><button class="primary" onclick="clearFilters()">Clear filters</button></div>
+</section>
+</main>
+<section id="player" class="player-page hidden" aria-label="Game player">
+  <div class="player-head"><button class="back" onclick="showHome()">← Back</button><div class="player-title"><h2 id="playerTitle"></h2><span id="playerMeta"></span></div><div class="player-actions"><button class="player-tool" onclick="reloadGame()" title="Reload game">↻</button><button class="player-tool" onclick="fullscreenGame()" title="Fullscreen">⛶</button><button class="favorite-big" id="playerFav" onclick="toggleCurrentFavorite()">♡</button></div></div>
+  <div class="game-frame-wrap"><div class="frame-loading" id="frameLoading"><div class="spinner"></div><b>Loading game…</b></div><iframe id="gameFrame" title="Game" allow="fullscreen; gamepad; autoplay; clipboard-write" allowfullscreen loading="lazy"></iframe><div id="demoNotice" class="demo-notice hidden">Your game is loading inside PlayHub.</div></div>
+</section>
+
+<section id="adminPanel" class="player-page hidden" aria-label="Owner administration"><div class="player-head"><button class="back" onclick="showHome()">← Back</button><div class="player-title"><h2>Owner controls</h2><span>Only your Supabase owner account can edit or delete games.</span></div></div><div id="adminStatus" style="padding:18px"></div></section>
+
+<section id="activityPanel" class="player-page hidden" aria-label="Activity log management">
+ <div class="player-head"><button class="back" onclick="closeActivityPanel()">← Back</button><div class="player-title"><h2>Activity log</h2><span>Live account, upload and gameplay activity</span></div><div class="player-actions"><button class="player-tool" onclick="refreshActivityLogs()" title="Refresh logs">↻</button></div></div>
+ <div style="padding:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center"><span id="activityLive" class="cloud-online">● Live</span><button class="secondary" onclick="refreshActivityLogs()">Refresh</button><select id="activityFilter" onchange="renderActivityLogs()"><option value="all">All activity</option><option value="sign_in">Sign-ins</option><option value="upload">Uploads</option><option value="play">Game plays</option></select></div>
+ <div id="activityList" style="padding:0 18px 24px"></div>
+</section>
+<footer><div class="creator-credit"><b>PlayHub</b><span>Free games for everyone.</span></div><span>Runs locally or on any static web host.</span><span class="made-by">Made by <strong>Sarthak Gupta</strong><br><span>Created in Dholpur, Rajasthan</span></span><span>© 2026 PlayHub</span></footer>
+
+<div class="modal-backdrop hidden" id="uploadModal" role="dialog" aria-modal="true" aria-labelledby="uploadTitle">
+ <div class="modal"><div class="modal-head"><div><h2 id="uploadTitle">Upload an HTML game</h2><p>Your game stays on this device. No server upload is performed.</p></div><button class="close-btn" onclick="closeModal('uploadModal')">×</button></div>
+ <form id="uploadForm" onsubmit="submitUpload(event)">
+  <div class="form-grid">
+   <div class="field full"><label>Single HTML file</label><div class="dropzone" id="dropzone" onclick="document.getElementById('gameFile').click()"><strong>📄 Choose or drop your .html game</strong><small>Single file only · works offline · scripts and styles must be inside the file</small><div class="file-name" id="fileName">No file selected</div></div><input id="gameFile" type="file" accept=".html,.htm,text/html" hidden></div>
+   <div class="field"><label for="gameName">Game name</label><input id="gameName" maxlength="40" required placeholder="My Awesome Game"></div>
+   <div class="field"><label for="gameCategory">Category</label><select id="gameCategory"><option>Arcade</option><option>Adventure</option><option>3D</option><option>Runner</option><option>Shooter</option><option>Puzzle</option><option>Racing</option><option>Sports</option><option>Simulation</option><option>Endless</option><option>2 Player</option><option>Multiplayer</option></select></div>
+   <div class="field full"><label for="gameDescription">Description</label><textarea id="gameDescription" maxlength="220" required placeholder="Tell players what makes your game fun..."></textarea></div>
+   <div class="field"><label for="gameEmoji">Icon emoji</label><input id="gameEmoji" maxlength="4" value="🎮" placeholder="🎮"></div>
+   <div class="field"><label for="gameTags">Tags</label><input id="gameTags" maxlength="100" placeholder="fast, fun, mobile"></div>
+  </div><p class="form-note">Safety: only choose HTML files you trust. Uploaded games run as code in your browser. PlayHub does not send the file anywhere.</p>
+  <div class="form-footer"><button type="button" class="secondary" onclick="closeModal('uploadModal')">Cancel</button><button type="submit" class="primary">Add to My Games</button></div>
+ </form></div>
+</div>
+
+<div class="modal-backdrop hidden" id="signModal" role="dialog" aria-modal="true" aria-labelledby="signTitle">
+ <div class="modal"><div class="modal-head"><div><h2 id="signTitle">Your PlayHub profile</h2><p>Optional cloud account powered by Supabase. Your profile and uploaded games can sync across devices when cloud is configured.</p></div><button class="close-btn" onclick="closeModal('signModal')">×</button></div>
+  <div class="signin-tabs"><button id="signInTab" class="active" onclick="setAuthMode('signin')">Sign in</button><button id="signUpTab" onclick="setAuthMode('signup')">Create profile</button></div>
+  <form onsubmit="submitAuth(event)"><div class="field"><label for="authName">Display name</label><input id="authName" maxlength="30" required placeholder="Player"></div><div class="field" style="margin-top:12px"><label for="authEmail">Email</label><input id="authEmail" type="email" required placeholder="you@example.com"></div><div class="field" style="margin-top:12px"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><button type="button" class="secondary" style="margin-top:10px" onclick="resetPlayHubPassword()">Forgot password?</button><p class="form-note" id="authNote">Use your real PlayHub cloud account. Email verification and password recovery are handled by Supabase.</p><div class="form-footer"><button type="button" class="secondary" onclick="closeModal('signModal')">Cancel</button><button class="primary" id="authSubmit">Sign in</button></div></form>
+ </div>
+</div><div class="toast" id="toast"></div>
+<script src="games.js"></script><script src="supabase-config.js"></script><script src="supabase-client.js"></script><script src="supabase-app.js"></script><script src="app.js"></script><script src="activity.js"></script>
+</body></html>
